@@ -7,12 +7,10 @@ from fastapi import Depends, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from psycopg import AsyncConnection
 
+from circle_tracker.auth.schemas import User
 from circle_tracker.auth.service import get_user_by_id
 from circle_tracker.auth.utils import decode_token
 from circle_tracker.database import db
-
-if TYPE_CHECKING:
-    from circle_tracker.auth.schemas import User
 
 security = HTTPBearer()
 

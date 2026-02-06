@@ -3,9 +3,8 @@ from typing import TYPE_CHECKING
 from fastapi import APIRouter, HTTPException
 
 from circle_tracker.auth.service import get_user_by_username
+from circle_tracker.dependencies import CurrentUser, DbConn
 
-if TYPE_CHECKING:
-    from circle_tracker.dependencies import CurrentUser, DbConn
 
 router = APIRouter(prefix="/users", tags=["users"])
 

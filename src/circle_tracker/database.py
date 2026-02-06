@@ -1,13 +1,11 @@
+from collections.abc import AsyncGenerator
 from typing import TYPE_CHECKING
 
 from psycopg_pool import AsyncConnectionPool
 
 from circle_tracker.config import settings
+from psycopg import AsyncConnection
 
-if TYPE_CHECKING:
-    from collections.abc import AsyncGenerator
-
-    from psycopg import AsyncConnection
 
 
 class Database:
