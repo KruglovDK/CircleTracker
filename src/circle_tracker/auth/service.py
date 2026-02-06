@@ -25,6 +25,18 @@ async def get_user_by_username(conn, username: str) -> User | None:
     return User(id=row[0], username=row[1], created_at=row[3])
 
 
+async def get_user_by_id(conn, user_id: str) -> User | None:
+    result = await conn.execute(
+        "SELECT id, username, password_hash, created_at FROM users WHERE id = %s",
+        (user_id,),
+    )
+    row = await result.fetchone()
+
+    if row is None:
+        return None
+
+    return User(id=row[0], username=row[1], created_at=row[3])
+
 async def authenticate_user(conn, username: str, password: str) -> User:
     result = await conn.execute(
         "SELECT id, username, password_hash, created_at FROM users WHERE username = %s",
