@@ -5,15 +5,14 @@ from fastapi import APIRouter, Depends, HTTPException
 from psycopg import AsyncConnection
 
 from circle_tracker.auth.exceptions import InvalidPasswordError, UserAlreadyExistsError, UserNotFoundError
-from circle_tracker.auth.schemas import RefreshRequest, SignIn, SignUp, Token
+from circle_tracker.auth.schemas import RefreshRequest, SignIn, SignUp, Token, User
 from circle_tracker.auth.service import authenticate_user, create_tokens, create_user
 from circle_tracker.auth.utils import decode_token
 from circle_tracker.database import db
+from circle_tracker.dependencies import DbConn, get_current_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
-
-# Dependency как type alias
-DbConn = Annotated[AsyncConnection, Depends(db.get_connection)]
+CurrentUser = Annotated[User, Depends(get_current_user)]
 
 
 @router.post("/register")
@@ -47,3 +46,7 @@ async def refresh(data: RefreshRequest) -> Token:
         raise HTTPException(status_code=401, detail="Token expired") from err
     except jwt.InvalidTokenError as err:
         raise HTTPException(status_code=401, detail="Invalid token") from err
+
+@router.get("/me")
+async def get_me(user: CurrentUser):
+    return user
