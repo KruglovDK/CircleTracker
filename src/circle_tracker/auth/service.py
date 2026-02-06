@@ -4,7 +4,12 @@ from circle_tracker.auth.exceptions import (
     UserNotFoundError,
 )
 from circle_tracker.auth.schemas import User
-from circle_tracker.auth.utils import hash_password, verify_password
+from circle_tracker.auth.utils import (
+    create_access_token,
+    create_refresh_token,
+    hash_password,
+    verify_password,
+)
 
 
 async def get_user_by_username(conn, username: str) -> User | None:
@@ -50,3 +55,11 @@ async def create_user(conn, username: str, password: str) -> User:
     row = await result.fetchone()
 
     return User(id=row[0], username=row[1], created_at=row[2])
+
+def create_tokens(user_id: str) -> dict:
+    data = {"sub": user_id}
+    return {
+        "access_token": create_access_token(data),
+        "refresh_token": create_refresh_token(data),
+        "token_type": "bearer",
+    }
