@@ -2,13 +2,11 @@ from typing import Annotated
 
 import jwt
 from fastapi import APIRouter, Depends, HTTPException
-from psycopg import AsyncConnection
 
 from circle_tracker.auth.exceptions import InvalidPasswordError, UserAlreadyExistsError, UserNotFoundError
 from circle_tracker.auth.schemas import RefreshRequest, SignIn, SignUp, Token, User
 from circle_tracker.auth.service import authenticate_user, create_tokens, create_user
 from circle_tracker.auth.utils import decode_token
-from circle_tracker.database import db
 from circle_tracker.dependencies import DbConn, get_current_user
 
 router = APIRouter(prefix="/auth", tags=["auth"])
@@ -29,7 +27,7 @@ async def login(data: SignIn, conn: DbConn):
         user = await authenticate_user(conn, data.username, data.password)
         return Token(**create_tokens(str(user.id)))
     except (UserNotFoundError, InvalidPasswordError) as err:
-        raise HTTPException(status_code=400, detail="Invalid username or passwprd") from err
+        raise HTTPException(status_code=400, detail="Invalid username or password") from err
 
 @router.post("/refresh")
 async def refresh(data: RefreshRequest) -> Token:
