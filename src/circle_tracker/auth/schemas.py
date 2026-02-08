@@ -1,10 +1,7 @@
-from typing import TYPE_CHECKING
+import datetime
+from uuid import UUID
 
 from pydantic import BaseModel, Field
-
-if TYPE_CHECKING:
-    import datetime
-    from uuid import UUID
 
 
 class SignUp(BaseModel):
@@ -22,8 +19,10 @@ class Token(BaseModel):
     refresh_token: str
     token_type: str = "bearer"
 
+
 class RefreshRequest(BaseModel):
     refresh_token: str
+
 
 class User(BaseModel):
     id: UUID
