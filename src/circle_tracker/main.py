@@ -3,6 +3,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from circle_tracker.auth.router import router as auth_router
+from circle_tracker.categories.router import router as categories_router
 from circle_tracker.database import db
 from circle_tracker.users.router import router as users_router
 
@@ -16,6 +17,7 @@ async def lifespan(app: FastAPI):  # noqa: ARG001
 app = FastAPI(lifespan=lifespan)
 app.include_router(auth_router)
 app.include_router(users_router)
+app.include_router(categories_router)
 
 @app.get("/health")
 async def health_check():
