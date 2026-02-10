@@ -4,9 +4,11 @@ from fastapi import FastAPI
 
 from circle_tracker.auth.router import router as auth_router
 from circle_tracker.categories.router import router as categories_router
+from circle_tracker.custom_items.router import router as custom_items_router
 from circle_tracker.database import db
-from circle_tracker.users.router import router as users_router
+from circle_tracker.groups.router import router as groups_router
 from circle_tracker.transactions.router import router as transactions_router
+from circle_tracker.users.router import router as users_router
 
 
 @asynccontextmanager
@@ -20,7 +22,8 @@ app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(categories_router)
 app.include_router(transactions_router)
-
+app.include_router(groups_router)
+app.include_router(custom_items_router)
 @app.get("/health")
 async def health_check():
     return {"status": "OK"}
