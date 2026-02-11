@@ -6,11 +6,10 @@ from pydantic import BaseModel
 
 class TransactionCreate(BaseModel):
     amount: int
-    description: str
-    category_id: int | None
-    created_at: datetime
+    description: str | None = None
+    category_id: int | None = None
     group_id: int | None = None
-    is_essential: bool = True
+    is_essential: bool = False
 
 class TransactionUpdate(BaseModel):
     amount: int

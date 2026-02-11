@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from circle_tracker.auth.router import router as auth_router
 from circle_tracker.categories.router import router as categories_router
@@ -9,6 +10,7 @@ from circle_tracker.database import db
 from circle_tracker.groups.router import router as groups_router
 from circle_tracker.transactions.router import router as transactions_router
 from circle_tracker.users.router import router as users_router
+
 
 
 @asynccontextmanager
@@ -27,3 +29,11 @@ app.include_router(custom_items_router)
 @app.get("/health")
 async def health_check():
     return {"status": "OK"}
+
+app.add_middleware(
+    CORSMiddleware, # type: ignore[arg-type]
+    allow_origins=["http://localhost:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
